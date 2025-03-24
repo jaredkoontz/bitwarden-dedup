@@ -11,5 +11,5 @@ This script:
   - Does not do anything to filter these, just alerts on them
 - Alerts on duplicate passwords
 
-This will output a "_verified".json file that you can then import into bitwarden. You will need to delete your current 
+This will output a "_verified".json file that you can then import into bitwarden. You will need to delete your current
 bitwarden entries before import, otherwise you will just have more duplicates.
