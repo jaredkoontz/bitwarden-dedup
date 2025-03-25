@@ -1,6 +1,6 @@
 # This workflow will install Python dependencies, run tests, and pre-commit with a single version of Python
 
-name: leet_code python
+name: bitwarden dedup
 
 on:
   push:
