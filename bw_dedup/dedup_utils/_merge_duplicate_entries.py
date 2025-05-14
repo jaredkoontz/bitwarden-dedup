@@ -1,6 +1,5 @@
 import logging
 from urllib.parse import urlsplit
-from urllib.parse import urlunsplit
 
 import tldextract
 import validators
@@ -11,9 +10,10 @@ from .data_types import PrunedEntry
 
 logger = logging.getLogger("bw_dedup")
 
-def _clean_url(url:str)->str:
+
+def _clean_url(url: str) -> str:
     parts = urlsplit(url)
-    ext = tldextract.extract(parts.hostname or '')
+    ext = tldextract.extract(parts.hostname or "")
 
     # Normalize domain
     if ext.suffix:
@@ -52,7 +52,6 @@ def fix_entries_in_items(
             else:
                 cleaned_url = _clean_url(url)
                 url = cleaned_url
-
 
         if not login_entry.username:
             logger.info(f"NO USERNAME: {entry}")
