@@ -17,7 +17,7 @@ def _create_id_map_and_prune_folders(new_folders) -> tuple[dict[str, str], list[
     return id_map, pruned_folders
 
 
-def prep_duplicate_folders(
+def prune_duplicate_dirs(
     folder_data: list[dict],
 ) -> tuple[dict[str, str], list[dict]] | tuple[None, None]:
     new_folders = {}

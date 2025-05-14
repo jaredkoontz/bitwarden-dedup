@@ -120,6 +120,12 @@ from bw_dedup.dedup_utils.data_types import make_item_data
                     "type": 2,
                     "login": {"username": "", "password": ""},
                 },
+                {
+                    "id": "yet_another_id",
+                    "login": {"password": "123", "username": "312"},
+                    "name": "yet_another_id",
+                    "type": 2,
+                },
             ],
             {"4N07H3R": "S0M31D"},
             [
@@ -149,6 +155,12 @@ from bw_dedup.dedup_utils.data_types import make_item_data
                     "id": "or",
                     "login": {"password": "", "username": ""},
                     "name": "here",
+                    "type": 2,
+                },
+                {
+                    "id": "yet_another_id",
+                    "login": {"password": "123", "username": "312"},
+                    "name": "yet_another_id",
                     "type": 2,
                 },
             ],
