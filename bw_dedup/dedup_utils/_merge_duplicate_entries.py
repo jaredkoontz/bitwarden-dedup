@@ -1,5 +1,8 @@
 import logging
+from urllib.parse import urlsplit
+from urllib.parse import urlunsplit
 
+import tldextract
 import validators
 
 from .data_types import BWEntryType
@@ -7,6 +10,22 @@ from .data_types import LoginInfo
 from .data_types import PrunedEntry
 
 logger = logging.getLogger("bw_dedup")
+
+def _clean_url(url:str)->str:
+    parts = urlsplit(url)
+    ext = tldextract.extract(parts.hostname or '')
+
+    # Normalize domain
+    if ext.suffix:
+        host = f"{ext.domain}.{ext.suffix}"
+    else:
+        host = parts.hostname  # IP or localhost
+
+    # Return with or without scheme based on presence of port
+    if parts.port:
+        return f"{host}:{parts.port}"
+    else:
+        return f"{parts.scheme}://{host}"
 
 
 def fix_entries_in_items(
@@ -29,6 +48,11 @@ def fix_entries_in_items(
             url = login_entry.uris[0]["uri"]
             if not validators.url(url):
                 logger.info(f"INVALID URL: {entry}")
+                # we are currently still adding this entry, should we?
+            else:
+                cleaned_url = _clean_url(url)
+                url = cleaned_url
+
 
         if not login_entry.username:
             logger.info(f"NO USERNAME: {entry}")
