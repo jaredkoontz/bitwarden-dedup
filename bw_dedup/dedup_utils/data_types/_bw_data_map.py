@@ -1,9 +1,12 @@
 import dataclasses
 import hashlib
 import json
+import logging
 from enum import auto
 from enum import Enum
 from pathlib import Path
+
+logger = logging.getLogger("bw_dedup")
 
 
 class BWEntryType(Enum):
@@ -66,12 +69,13 @@ def make_item_data(data_items: list[dict]) -> list[PrunedEntry]:
         entry_type = dict_info.get("type")
         if entry_type == BWEntryType.CARD.value:
             entry = PrunedEntry(BWEntryType(entry_type), dict_info)
+
         elif entry_type == BWEntryType.UNAME_PW.value:
             entry = LoginInfo(BWEntryType(entry_type), dict_info)
             if not entry.password and not entry.username:
-                print(f"USELESS {entry}")
-                # skip this one completely
+                logger.warning(f"USELESS {entry}")
                 continue
+
         else:
             # this might be malformed. For this sake of safety, just ignore it and add it back to the final
             # entry list
@@ -80,7 +84,7 @@ def make_item_data(data_items: list[dict]) -> list[PrunedEntry]:
     return verified
 
 
-def from_json(file_path: Path) -> BWDataMap:
+def make_bw_data_map_from_json(file_path: Path) -> BWDataMap:
     json_data = json.loads(file_path.read_text())
     return BWDataMap(
         json_data["encrypted"], json_data["folders"], make_item_data(json_data["items"])

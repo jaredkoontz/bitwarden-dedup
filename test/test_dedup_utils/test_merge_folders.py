@@ -1,6 +1,6 @@
 import pytest
 
-from bw_dedup.dedup_utils import prep_duplicate_folders
+from bw_dedup.dedup_utils import prune_duplicate_dirs
 
 
 @pytest.mark.parametrize(
@@ -27,7 +27,7 @@ from bw_dedup.dedup_utils import prep_duplicate_folders
     ],
 )
 def test_prep_duplicate_folders(test_data, expected_map, expected_folders):
-    prepped = prep_duplicate_folders(test_data)
+    prepped = prune_duplicate_dirs(test_data)
     assert len(prepped) == 2
     assert prepped[0] == expected_map
     assert prepped[1] == expected_folders

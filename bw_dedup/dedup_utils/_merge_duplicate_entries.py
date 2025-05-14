@@ -1,8 +1,12 @@
+import logging
+
 import validators
 
 from .data_types import BWEntryType
 from .data_types import LoginInfo
 from .data_types import PrunedEntry
+
+logger = logging.getLogger("bw_dedup")
 
 
 def fix_entries_in_items(
@@ -16,30 +20,29 @@ def fix_entries_in_items(
         login_entry: LoginInfo = entry
         name = login_entry.data.get("name")
         if not name:
-            print(f"INVALID NAME: {entry}")
+            logger.info(f"INVALID NAME: {entry}")
 
         if not login_entry.uris:
-            print(f"NO URI: {entry}")
+            logger.info(f"NO URI: {entry}")
             return None
         else:
             url = login_entry.uris[0]["uri"]
             if not validators.url(url):
-                print(f"INVALID URL: {entry}")
+                logger.info(f"INVALID URL: {entry}")
 
         if not login_entry.username:
-            print(f"NO USERNAME: {entry}")
+            logger.info(f"NO USERNAME: {entry}")
         if not login_entry.password:
-            print(f"NO PW: {entry}")
+            logger.info(f"NO PW: {entry}")
 
         if login_entry.hex_digest in all_pws:
-            pass
-            # print(f"duplicate PW on {entry}")
+            logger.info(f"duplicate PW on {entry}")
         else:
             all_pws.add(login_entry.hex_digest)
         cred_tuple = (login_entry.username, login_entry.hex_digest)
         if credential_map.get(url):
             if cred_tuple in credential_map[url]:
-                print(f"DUPLICATE {entry}")
+                logger.debug(f"DUPLICATE {entry}")
                 return None
             else:
                 credential_map[url].add(cred_tuple)
